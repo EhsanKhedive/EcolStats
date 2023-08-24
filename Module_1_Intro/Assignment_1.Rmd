@@ -1,0 +1,68 @@
+---
+title: "Week1 Assignment"
+author: "Your name"
+date: "2023-08-23"
+output: word_document
+---
+
+Please provide the following questions with a short (~ one paragraph) answer and submit the knitted document in Canvas. Don't forget to put your name as "author". Create an R project to make it easy for locating files.
+
+## Hypothesis development
+
+Please write a precise null and alternative hypothesizes for the experiments described below based on the evidence you might be able to provide (one-tailed/two-tailed):
+
+**Experiment 1:** We want to compare the student's heights between third grades and fifth grades in a school.
+
+[answer here]
+
+**Experiment 2:** We want to test the effect of difference in air temperature on relative humidity.
+
+[answer here]
+
+**Experiment 3:** We want to see if high soil nitrogen is associated with higher growth in a forest stand.
+
+[answer here]
+
+## One sample T-test
+
+Please interpret the result of the three tests in one short paragraph.
+
+[answer here]
+
+```{r}
+t.test(iris$Sepal.Length, alternative="greater", mu=5.7)		#1 sample, mu>5.7
+t.test(iris$Sepal.Length, alternative="greater", mu=6)		#1 sample, mu>6
+t.test(iris$Sepal.Length, alternative="greater", mu=5)		#1 sample, mu>5
+
+```
+
+## Two sample T-test
+
+Please interpret the result of the two following tests and state why the selection of one tailed method. (Download "Data.csv" from github repository and put it in the project folder for this test)
+
+[answer here]
+
+```{r}
+
+Classheight <- read.csv("Data.csv") #import data to R environment
+t.test(Classheight$ECOL592003, Classheight$ECOL592002, var.equal = TRUE, alternative="less")		#2 sample, ECOL592003<ECOL592002
+t.test(Classheight$ECOL592003, Classheight$ECOL592002, var.equal = TRUE, alternative="two.sided")	#2 sample, ECOL592003=ECOL592002
+```
+
+
+## Interpreting plots
+
+Please interpret the following plots in a short paragraph.
+
+[answer here]
+
+```{r}
+#help(t.test)
+hist(iris$Sepal.Length)
+hist(iris$Sepal.Width)
+plot(density(iris$Sepal.Length), ylim=c(0,1), xlim=c(0,10))
+lines(density(iris$Sepal.Width), lty=2)
+abline(v=5.84)
+abline(v=3.057, lty=2)
+
+```
