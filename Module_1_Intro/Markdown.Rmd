@@ -1,0 +1,80 @@
+---
+title: "Week1"
+author: "Ehsan Khedive"
+date: "2023-08-23"
+output: word_document
+---
+
+
+## R Markdown
+
+You can add text here:
+
+# Main title
+
+## subtitle
+
+*Italics*
+
+**Bold**
+
+## Handling datasets
+
+In Tidyverse **%>%** (called "piping") introduces the previous output as the object to the next code. In other words, **%>%** breaks the nested codes into linear sets of consecutive codes.
+
+```{r}
+library(dplyr)
+iriss <- subset(iris, Species == c("setosa","versicolor"), select = c(Sepal.Length, Sepal.Width, Species)) #subsetting a dataset
+iriss2 <- iriss %>% group_by(Species) %>% mutate(counter = row_number(Species)) #adding index/rep number to dataset [piping method]
+iriss2 <- mutate(group_by(iriss, Species), counter = row_number(Species)) #adding index/rep number to dataset [nested method]
+iriss$Species <- as.factor(iriss$Species) #change variable's format
+iriss$col4 <- iriss$Sepal.Length + iriss$Sepal.Width  #adding/subtracting/multiplying columns
+
+```
+
+## Plots
+
+```{r}
+#help(t.test)
+library(ggplot2)
+library(tidyverse)
+library(multcomp)
+hist(iris$Sepal.Length)
+hist(iris$Sepal.Width)
+plot(density(iris$Sepal.Length, bw = .15), ylim=c(0,0.6), xlim=c(4,9))
+#lines(density(iris$Sepal.Width), col = factor(iris$Species), lty=2)
+#abline(v=5.84)
+#abline(v=3.057, lty=2)
+ggplot(iris, aes(x=Sepal.Length, color=Species)) + geom_density()
+
+res_aov <- aov(Sepal.Width ~ Species,   data = iris)
+summary(res_aov)
+
+post_test <- glht(res_aov,
+  linfct = mcp(Species = "Tukey")
+)
+
+summary(post_test)
+```
+
+## Ttest
+
+
+```{r}
+t.test(iris$Sepal.Length, alternative="greater", mu=5.7)		#1 sample, mu>5.7
+t.test(iris$Sepal.Length, alternative="greater", mu=6)		#1 sample, mu>6
+t.test(iris$Sepal.Length, alternative="greater", mu=5)		#1 sample, mu>5
+
+Classheight <- read.csv("Data.csv")
+t.test(Classheight$ECOL592003, Classheight$ECOL592002, var.equal = TRUE, alternative="less")		#2 sample, x1>x2
+t.test(Classheight$ECOL592003, Classheight$ECOL592002, var.equal = TRUE, alternative="two.sided")	#2 sample, x1=x2
+```
+
+## Power test
+
+```{r}
+power.anova.test(3,between.var = 5.67,within.var = 19.115, n=20)
+power.t.test(n=17, delta = 175.06-170.18, sd = 7, alternative = "one.sided", type = "two.sample")
+power.t.test(n = 17, delta = 175.06-170.18, sd = 7, alternative = "two.sided", type = "two.sample")
+
+```
